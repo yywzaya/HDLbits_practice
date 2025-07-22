@@ -1,0 +1,28 @@
+module top_module (
+    input [7:0] a,
+    input [7:0] b,
+    output [7:0] s,
+    output overflow
+); //
+ 
+    wire [7:0] cout;
+    adder add(a[0],b[0],0,s[0],cout[0]);
+    
+    genvar i;
+    generate
+        for (i=1;i<=7;i++) begin:addercopy
+            adder add1 (a[i],b[i],cout[i-1],s[i],cout[i]);
+        end
+    endgenerate
+                           
+    assign overflow = cout[6] ^ cout[7];
+
+endmodule
+
+module adder(
+    input a,b,cin,
+    output sum,cout);
+    
+    assign sum = a ^ b ^ cin;
+    assign cout = (a&b) | (a&cin) | (b&cin);
+endmodule

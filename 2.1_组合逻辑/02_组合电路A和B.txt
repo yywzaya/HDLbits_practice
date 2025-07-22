@@ -1,0 +1,22 @@
+//method_1 直接用表达式
+module top_module (input x, input y, output z);
+    assign z = ((x^~y) | ((x^y)&x)) ^ ((x^~y) & ((x^y)&x));
+endmodule
+
+//method_2 构建层次结构
+module top_module (input x, input y, output z);
+    wire q1,q2,q3,q4;
+    A IA1 (x,y,q1);
+    A IA2 (x,y,q3);
+    B IB1 (x,y,q2);
+    B IB2 (x,y,q4);
+    assign z = (q1|q2)^(q3&q4);
+endmodule
+
+module A (input x,input y,output z);
+    assign z = (x^y)&x;
+endmodule
+
+module B (input x,input y,output z);
+    assign z = x^~y;
+endmodule
