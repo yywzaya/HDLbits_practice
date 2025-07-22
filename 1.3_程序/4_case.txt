@@ -1,0 +1,23 @@
+module top_module ( 
+    input [2:0] sel, 
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            3'o0: out=data0;
+            3'o1: out=data1;
+            3'o2: out=data2;
+            3'o3: out=data3;
+            3'o4: out=data4;
+            3'o5: out=data5;
+            default: out= 4'b0000;
+        endcase
+    end
+
+endmodule
