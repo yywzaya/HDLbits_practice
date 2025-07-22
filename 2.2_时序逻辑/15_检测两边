@@ -8,6 +8,7 @@ module top_module (
     always @(posedge clk)
         begin
             temp <= in;
-            anyedge <= in ^ temp;
+            anyedge <= temp ^ in;
         end
+
 endmodule
