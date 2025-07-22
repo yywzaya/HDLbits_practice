@@ -1,0 +1,24 @@
+module top_module (
+    input clk,
+    input reset,   // Synchronous active-high reset
+    output [3:1] ena,
+    output [15:0] q);
+
+    assign ena[1] = q[3:0]==4'b1001 ? 1:0,
+        ena[2] = q[7:0]==8'b1001_1001 ? 1:0,
+        ena[3] = q[11:0]==12'b1001_1001_1001 ? 1:0;
+    //当赋值的右侧比左侧宽并且上部位被截断时，就会发生截断值。如果存在您意想不到的截断，这可能表明存在错误，因此请仔细检查这些错误。
+    //这不是错误的最常见情况是当您使用没有宽度的文字（隐含 32 位）时，例如，使用 assign a[1：0] = 1;而不是 assign a[1：0] = 2'd1;。
+    //8'd99 = 8'b1100011 ≠ 8'b1001_1001
+    
+    count10 count1 (clk,reset,1,q[3:0]);
+    count10 count2 (clk,reset,ena[1],q[7:4]);
+    count10 count3 (clk,reset,ena[2],q[11:8]);
+    count10 count4 (clk,reset,ena[3],q[15:12]);        
+endmodule
+        
+module count10 (input clk,reset,ena,output [3:0] q);    
+    always @(posedge clk)
+            q <= reset ? 0 : (ena ? (q==9 ? 0 : q+1) : q);
+endmodule
+    
