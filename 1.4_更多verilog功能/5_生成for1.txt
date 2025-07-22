@@ -1,0 +1,25 @@
+module top_module( 
+    input [99:0] a, b,
+    input cin,
+    output [99:0] cout,
+    output [99:0] sum );
+    
+    full_adder add0 (a[0],b[0],cin,cout[0],sum[0]);
+    genvar i;
+    
+    generate
+        for(i=1;i<100;i++) begin: block   
+        //generate 语句中的 For 循环需要一个名称（循环本质上是为每个循环迭代创建一个实例，而 Quartus 需要为它们创建一个名称）。
+        //在 begin 后使用冒号表示 begin...代码 A 标签的结束块。例如，要将此循环命名为 block_name，请使用 for （i=0; i<2; i=i+1） begin ： block_name
+            full_adder add100 (a[i],b[i],cout[i-1],cout[i],sum[i]);
+        end
+    endgenerate
+endmodule
+
+module full_adder(
+    input a,b,cin,
+    output cout,sum);
+    
+    assign cout = a&b | a&cin | b&cin;
+    assign sum = a ^ b ^ cin;
+endmodule
