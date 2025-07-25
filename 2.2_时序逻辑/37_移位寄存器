@@ -1,0 +1,22 @@
+module top_module (
+    input [3:0] SW,
+    input [3:0] KEY,
+    output [3:0] LEDR
+); //
+
+    MUXDFF MD3 (KEY[0],KEY[1],KEY[2],KEY[3],SW[3],LEDR[3]);
+    genvar i;
+    generate
+        for (i = 0; i<=2; i++) begin:a
+            MUXDFF MD (KEY[0],KEY[1],KEY[2],LEDR[i+1],SW[i],LEDR[i]);
+        end
+    endgenerate
+   
+endmodule
+
+module MUXDFF (input clk,E,L,W,R,output Q);
+    wire X,D;
+    assign X = E ? W:Q, D = L ? R:X;
+    always @(posedge clk)
+        Q <= D;
+endmodule
